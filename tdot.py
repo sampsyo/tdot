@@ -58,7 +58,7 @@ def pairwise(iterable):
     return zip(a, b)
 
 
-def tg(dot):
+def tdot(dot):
     term_w, term_h = shutil.get_terminal_size()
 
     bb = [float(n) for n in dot['bb'].split(',')]
@@ -94,4 +94,4 @@ def tg(dot):
 
 
 if __name__ == '__main__':
-    tg(json.load(sys.stdin))
+    tdot(json.load(sys.stdin))
