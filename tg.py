@@ -30,10 +30,10 @@ class Layout:
         self._extend(y2 + 1)
         if x1 == x2:
             # Vertical.
-            self.print_vert(x1, min(y1, y2), '|' * abs(y1 - y2))
+            self.print_vert(x1, min(y1, y2), '\u2502' * abs(y1 - y2))
         elif y1 == y2:
             # Horizontal.
-            self.print(min(x1, x2), y1, '-' * abs(x1 - x2))
+            self.print(min(x1, x2), y1, '\u2500' * abs(x1 - x2))
         else:
             assert False, "I only know how to draw orthogonal lines"
 
