@@ -77,19 +77,19 @@ def tdot(dot):
 
     layout = Layout(term_w)
 
-    # Draw objects.
-    for obj in dot['objects']:
-        obj_x, obj_y = [float(n) for n in obj['pos'].split(',')]
-        obj_w = float(obj['width'])
-        obj_h = float(obj['height'])
-        layout.print(_x(obj_x - obj_w), _y(obj_y - obj_h), obj['name'])
-
     # Draw edges.
     for edge in dot['edges']:
         for (x1, y1), (x2, y2) in pairwise(parse_spline(edge['pos'])):
             if x1 == x2 and y1 == y2:
                 continue
             layout.line(_x(x1), _y(y1), _x(x2), _y(y2))
+
+    # Draw objects.
+    for obj in dot['objects']:
+        obj_x, obj_y = [float(n) for n in obj['pos'].split(',')]
+        obj_w = float(obj['width'])
+        obj_h = float(obj['height'])
+        layout.print(_x(obj_x - obj_w), _y(obj_y - obj_h), obj['name'])
 
     print(layout)
 
