@@ -37,6 +37,15 @@ class Layout:
         else:
             assert False, "I only know how to draw orthogonal lines"
 
+    def path(self, points):
+        """Draw a sequence of lines given as a sequence of their
+        intermediate points.
+        """
+        for (x1, y1), (x2, y2) in pairwise(points):
+            if x1 == x2 and y1 == y2:
+                continue
+            self.line(x1, y1, x2, y2)
+
     def display(self):
         return '\n'.join(''.join(ln) for ln in self.contents)
 
@@ -79,10 +88,7 @@ def tdot(dot):
 
     # Draw edges.
     for edge in dot['edges']:
-        for (x1, y1), (x2, y2) in pairwise(parse_spline(edge['pos'])):
-            if x1 == x2 and y1 == y2:
-                continue
-            layout.line(_x(x1), _y(y1), _x(x2), _y(y2))
+        layout.path((_x(x), _y(y)) for x, y in parse_spline(edge['pos']))
 
     # Draw objects.
     for obj in dot['objects']:
