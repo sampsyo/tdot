@@ -2,6 +2,26 @@ import json
 import sys
 import shutil
 import itertools
+from enum import Enum
+
+
+class Direction(Enum):
+    UP = 0
+    RIGHT = 1
+    DOWN = 2
+    LEFT = 3
+
+
+CORNERS = {
+    (Direction.UP, Direction.RIGHT): '\u250c',
+    (Direction.UP, Direction.LEFT): '\u2510',
+    (Direction.RIGHT, Direction.DOWN): '\u2510',
+    (Direction.RIGHT, Direction.UP): '\u2518',
+    (Direction.DOWN, Direction.LEFT): '\u2518',
+    (Direction.DOWN, Direction.RIGHT): '\u2514',
+    (Direction.LEFT, Direction.UP): '\u2514',
+    (Direction.LEFT, Direction.DOWN): '\u250c',
+}
 
 
 class Layout:
@@ -41,10 +61,28 @@ class Layout:
         """Draw a sequence of lines given as a sequence of their
         intermediate points.
         """
+        last_dir = None
+
         for (x1, y1), (x2, y2) in pairwise(points):
             if x1 == x2 and y1 == y2:
                 continue
             self.line(x1, y1, x2, y2)
+
+            # Which direction did we just move?
+            if x2 < x1:
+                dir = Direction.LEFT
+            elif x2 > x1:
+                dir = Direction.RIGHT
+            elif y2 < y1:
+                dir = Direction.UP
+            else:
+                dir = Direction.DOWN
+
+            # Draw a corner.
+            if last_dir is not None and (last_dir, dir) in CORNERS:
+                self.print(x1, y1, CORNERS[(last_dir, dir)])
+
+            last_dir = dir
 
     def display(self):
         return '\n'.join(''.join(ln) for ln in self.contents)
