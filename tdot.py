@@ -60,6 +60,7 @@ def pairwise(iterable):
 
 def tdot(dot):
     term_w, term_h = shutil.get_terminal_size()
+    term_h -= 3  # For prompt and such.
 
     bb = [float(n) for n in dot['bb'].split(',')]
     assert bb[0] == bb[1] == 0
@@ -79,15 +80,15 @@ def tdot(dot):
     # Draw objects.
     for obj in dot['objects']:
         obj_x, obj_y = [float(n) for n in obj['pos'].split(',')]
-        layout.print(_x(obj_x), _y(obj_y), obj['name'])
+        obj_w = float(obj['width'])
+        obj_h = float(obj['height'])
+        layout.print(_x(obj_x - obj_w), _y(obj_y - obj_h), obj['name'])
 
     # Draw edges.
     for edge in dot['edges']:
-        print(edge['pos'])
         for (x1, y1), (x2, y2) in pairwise(parse_spline(edge['pos'])):
             if x1 == x2 and y1 == y2:
                 continue
-            print(x1, y1, x2, y2)
             layout.line(_x(x1), _y(y1), _x(x2), _y(y2))
 
     print(layout)
